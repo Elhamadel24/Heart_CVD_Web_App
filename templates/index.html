@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %}CardioAI | AI-Powered Cardiovascular Disease Prediction & Analytics{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <img src="{{ url_for('static', filename='images/hero_bg.png') }}" class="hero-bg-img" alt="">
+  <div class="hero-inner">
+    <div>
+      <span class="hero-eyebrow">Machine Learning · Healthcare Analytics</span>
+      <h1>AI-Powered Cardiovascular Disease Prediction &amp; Analytics</h1>
+      <p class="lead">
+        A complete, end-to-end analytics platform that turns 270,000+ real patient
+        records into actionable heart-health insight — from exploratory data
+        analysis to a trained machine learning model to an interactive risk
+        estimator, alongside the original Power BI dashboard.
+      </p>
+      <div class="hero-actions">
+        <a href="{{ url_for('prediction') }}" class="btn btn-primary">Start Prediction →</a>
+        <a href="{{ url_for('analytics') }}" class="btn btn-light">View Analytics</a>
+        <a href="{{ url_for('performance') }}" class="btn btn-light">Model Performance</a>
+      </div>
+    </div>
+    <div class="hero-heart-wrap">
+      <img src="{{ url_for('static', filename='images/heart.png') }}" alt="Anatomical heart illustration">
+    </div>
+  </div>
+</section>
+
+<section class="stats-strip">
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-value">{{ "{:,}".format(stats.total_records) }}</div>
+      <div class="stat-label">Patient Records</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">{{ stats.cvd_pct }}%</div>
+      <div class="stat-label">CVD Prevalence</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">{{ stats.accuracy }}%</div>
+      <div class="stat-label">Model Accuracy</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">{{ stats.roc_auc }}</div>
+      <div class="stat-label">ROC-AUC ({{ stats.best_model }})</div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">What's inside</span>
+      <h2>A complete healthcare AI pipeline</h2>
+      <p>Every number below is generated from the real dataset and a real trained model — nothing here is simulated.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="icon-badge">🩺</div>
+        <h3>CVD Risk Prediction</h3>
+        <p>Enter a patient's vitals and lifestyle factors to get an instant, model-driven cardiovascular risk estimate with probabilities.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge">📊</div>
+        <h3>Data Analytics &amp; EDA</h3>
+        <p>Explore the real distribution of age, cholesterol, glucose, blood pressure and lifestyle factors across {{ "{:,}".format(stats.total_records) }} patients.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge">🤖</div>
+        <h3>Model Comparison</h3>
+        <p>Multiple classification models were trained and evaluated head-to-head; the best performer, {{ stats.best_model }}, powers every prediction.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge">📈</div>
+        <h3>Power BI Dashboard</h3>
+        <p>The original "Where Heart Data Becomes Insight" Power BI report is preserved and viewable directly inside the app.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge">🧬</div>
+        <h3>{{ stats.n_features }} Clinical Features</h3>
+        <p>Age, gender, height, weight, BMI, blood pressure, cholesterol, glucose, smoking, alcohol and activity level.</p>
+      </div>
+      <div class="card">
+        <div class="icon-badge">🔬</div>
+        <h3>Reproducible Pipeline</h3>
+        <p>A single scikit-learn pipeline handles preprocessing and prediction identically for training and live user input.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:white;">
+  <div class="container two-col">
+    <div>
+      <span class="section-eyebrow">Why it matters</span>
+      <h2 style="font-size:1.8rem;font-weight:800;margin:10px 0 16px;">Cardiovascular disease is the world's leading cause of death</h2>
+      <p style="color:var(--gray-text);margin-bottom:20px;">
+        Early identification of risk factors — elevated blood pressure, high cholesterol,
+        abnormal glucose, smoking, inactivity and obesity — can meaningfully change outcomes.
+        This project combines a real clinical dataset with machine learning to make that
+        risk visible and explorable.
+      </p>
+      <div class="tag-list">
+        <span class="tag">Blood Pressure</span>
+        <span class="tag">Cholesterol</span>
+        <span class="tag">Glucose</span>
+        <span class="tag">BMI</span>
+        <span class="tag">Smoking</span>
+        <span class="tag">Alcohol</span>
+        <span class="tag">Physical Activity</span>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h4>Target Distribution</h4>
+      <img src="{{ url_for('static', filename='images/eda/target_distribution.png') }}" alt="Target distribution chart">
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %}CVD Risk Prediction | CardioAI{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <h1>🩺 Cardiovascular Disease Risk Prediction</h1>
+    <p>Enter patient vitals and lifestyle factors below. The trained machine learning model will estimate cardiovascular disease risk in real time.</p>
+  </div>
+</div>
+
+<div class="container" style="max-width:900px;">
+  <form class="form-card" method="POST" action="{{ url_for('prediction') }}">
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Age (years)</label>
+        <input type="number" name="age" min="18" max="100" required
+               value="{{ form_values.age if form_values else 45 }}">
+      </div>
+      <div class="form-group">
+        <label>Gender</label>
+        <select name="gender" required>
+          {% for opt in options.gender %}
+          <option value="{{ opt }}" {{ 'selected' if form_values and form_values.gender==opt }}>{{ opt|capitalize }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Height (cm)</label>
+        <input type="number" name="height" min="120" max="230" required
+               value="{{ form_values.height if form_values else 170 }}">
+      </div>
+      <div class="form-group">
+        <label>Weight (kg)</label>
+        <input type="number" name="weight" min="30" max="250" required
+               value="{{ form_values.weight if form_values else 75 }}">
+      </div>
+
+      <div class="form-group">
+        <label>Systolic Blood Pressure (ap_hi, mmHg)</label>
+        <input type="number" name="ap_hi" min="80" max="250" required
+               value="{{ form_values.ap_hi if form_values else 120 }}">
+        <span class="form-hint">Normal ≈ 90–120</span>
+      </div>
+      <div class="form-group">
+        <label>Diastolic Blood Pressure (ap_lo, mmHg)</label>
+        <input type="number" name="ap_lo" min="40" max="160" required
+               value="{{ form_values.ap_lo if form_values else 80 }}">
+        <span class="form-hint">Normal ≈ 60–80</span>
+      </div>
+
+      <div class="form-group">
+        <label>Cholesterol Level</label>
+        <select name="cholesterol" required>
+          {% for opt in options.cholesterol %}
+          <option value="{{ opt }}" {{ 'selected' if form_values and form_values.cholesterol==opt }}>{{ opt|capitalize }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Glucose Status</label>
+        <select name="gluc" required>
+          {% for opt in options.gluc %}
+          <option value="{{ opt }}" {{ 'selected' if form_values and form_values.gluc==opt }}>{{ opt|capitalize }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Smoking</label>
+        <select name="smoke" required>
+          {% for opt in options.smoke %}
+          <option value="{{ opt }}" {{ 'selected' if form_values and form_values.smoke==opt }}>{{ opt|capitalize }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Alcohol Intake</label>
+        <select name="alco" required>
+          {% for opt in options.alco %}
+          <option value="{{ opt }}" {{ 'selected' if form_values and form_values.alco==opt }}>{{ opt|capitalize }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Physical Activity</label>
+        <select name="active" required>
+          {% for opt in options.active %}
+          <option value="{{ opt }}" {{ 'selected' if form_values and form_values.active==opt }}>{{ opt|capitalize }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:28px;">
+      <button type="submit" class="btn btn-primary" style="padding:15px 40px;font-size:1rem;">
+        Predict CVD Risk →
+      </button>
+    </div>
+
+    {% if result %}
+      {% if result.error %}
+        <div class="disclaimer" style="margin-top:24px;">⚠️ {{ result.error }}</div>
+      {% else %}
+      <div class="result-card {{ result.risk_class }}">
+        <div class="result-title">{{ result.prediction }}</div>
+        <div class="result-sub">{{ result.risk_level }} · Estimated using {{ result.model_used }} · Calculated BMI: {{ result.bmi }}</div>
+
+        <div class="prob-bars">
+          <div class="prob-bar-item">
+            <div>Probability of CVD</div>
+            <div class="prob-bar-track"><div class="prob-bar-fill" style="width:{{ result.prob_cvd }}%;"></div></div>
+            <div><strong>{{ result.prob_cvd }}%</strong></div>
+          </div>
+          <div class="prob-bar-item">
+            <div>Probability of Non-CVD</div>
+            <div class="prob-bar-track"><div class="prob-bar-fill" style="width:{{ result.prob_non_cvd }}%;"></div></div>
+            <div><strong>{{ result.prob_non_cvd }}%</strong></div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    {% endif %}
+
+    <div class="disclaimer">
+      ⚠️ This tool is for educational and research purposes only and is not a substitute
+      for professional medical advice, diagnosis, or treatment.
+    </div>
+  </form>
+</div>
+{% endblock %}

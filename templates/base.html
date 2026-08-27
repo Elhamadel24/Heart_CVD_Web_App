@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}CardioAI | CVD Prediction & Analytics{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="icon" href="{{ url_for('static', filename='images/heart.png') }}">
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a href="{{ url_for('home') }}" class="brand">
+      <span class="brand-icon">♥</span>
+      CardioAI
+    </a>
+    <ul class="nav-links" style="display:flex;">
+      <li><a href="{{ url_for('home') }}" class="{{ 'active' if request.endpoint=='home' }}">Home</a></li>
+      <li><a href="{{ url_for('prediction') }}" class="{{ 'active' if request.endpoint=='prediction' }}">Prediction</a></li>
+      <li><a href="{{ url_for('analytics') }}" class="{{ 'active' if request.endpoint=='analytics' }}">Data Analytics</a></li>
+      <li><a href="{{ url_for('performance') }}" class="{{ 'active' if request.endpoint=='performance' }}">Model Performance</a></li>
+      <li><a href="{{ url_for('powerbi') }}" class="{{ 'active' if request.endpoint=='powerbi' }}">Power BI Analytics</a></li>
+      <li><a href="{{ url_for('about') }}" class="{{ 'active' if request.endpoint=='about' }}">About</a></li>
+    </ul>
+  </div>
+</nav>
+
+{% block content %}{% endblock %}
+
+<footer>
+  <div class="container">
+    <p><strong>CardioAI</strong> — AI-Powered Cardiovascular Disease Prediction &amp; Analytics</p>
+    <p>Built with Flask, scikit-learn &amp; the real project dataset (270,064 records) · Educational &amp; research use only</p>
+  </div>
+</footer>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

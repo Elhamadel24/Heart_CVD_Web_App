@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Model Performance | CardioAI{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <h1>🤖 Model Performance &amp; Comparison</h1>
+    <p>Real evaluation results from {{ n_train }} training and {{ n_test }} held-out test records. No values on this page are hard-coded.</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section-header">
+    <span class="section-eyebrow">Winning Model</span>
+    <h2>{{ best_model }}</h2>
+    <p>Selected automatically after training because it achieved the highest ROC-AUC (tie-break: F1-score) among all candidates.</p>
+  </div>
+
+  <div class="grid-4" style="margin-bottom:50px;">
+    <div class="metric-card">
+      <div class="metric-value">{{ (best_metrics.accuracy*100)|round(2) }}%</div>
+      <div class="metric-label">Accuracy</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">{{ (best_metrics.precision*100)|round(2) }}%</div>
+      <div class="metric-label">Precision</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">{{ (best_metrics.recall*100)|round(2) }}%</div>
+      <div class="metric-label">Recall</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">{{ best_metrics.roc_auc }}</div>
+      <div class="metric-label">ROC-AUC</div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span class="section-eyebrow">Comparison</span>
+    <h2>All Trained Models</h2>
+  </div>
+
+  <table class="data-table" style="margin-bottom:50px;">
+    <thead>
+      <tr>
+        <th>Model</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1-score</th><th>ROC-AUC</th><th>Train Time (s)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for name, r in results.items() %}
+      <tr class="{{ 'best-row' if name == best_model }}">
+        <td>{{ name }} {% if name == best_model %}<span class="badge badge-best">BEST</span>{% endif %}</td>
+        <td>{{ (r.accuracy*100)|round(2) }}%</td>
+        <td>{{ (r.precision*100)|round(2) }}%</td>
+        <td>{{ (r.recall*100)|round(2) }}%</td>
+        <td>{{ (r.f1_score*100)|round(2) }}%</td>
+        <td>{{ r.roc_auc }}</td>
+        <td>{{ r.train_time_sec }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="grid-2" style="margin-bottom:50px;">
+    <div class="chart-card">
+      <h4>Confusion Matrix — {{ best_model }}</h4>
+      <img src="{{ url_for('static', filename='images/confusion_matrix.png') }}" alt="Confusion Matrix">
+    </div>
+    <div class="chart-card">
+      <h4>ROC Curve Comparison</h4>
+      <img src="{{ url_for('static', filename='images/roc_curve.png') }}" alt="ROC Curve">
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:50px;">
+    <h3>How the best model was selected</h3>
+    <p>
+      Every model listed above was trained on the exact same stratified 80/20 train-test split of the
+      cleaned dataset, using an identical preprocessing pipeline (standard scaling for numeric features,
+      one-hot encoding for categorical features). Each was scored on the held-out test set using
+      Accuracy, Precision, Recall, F1-score and ROC-AUC. The model with the highest ROC-AUC — the metric
+      most robust to class imbalance — was selected as the production model, with F1-score as a tie-breaker.
+      This selection happens automatically inside <code>train_model.py</code>; nothing is assumed in advance.
+    </p>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}About | CardioAI{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <h1>ℹ️ About This Project</h1>
+    <p>CardioAI is an end-to-end cardiovascular disease analytics platform built on a real 270,064-record clinical dataset.</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="grid-2" style="margin-bottom:50px;">
+    <div class="card">
+      <h3>📁 Dataset</h3>
+      <p>
+        The dataset was extracted directly from the project's own Power BI data model
+        (<code>Where_Heart_Data_Becomes_Insight.pbix</code>) and contains
+        {{ "{:,}".format(dataset_info.n_rows) }} patient records across
+        {{ dataset_info.n_columns }} original columns, with
+        {{ dataset_info.missing_values }} missing values and
+        {{ dataset_info.duplicate_rows_ignoring_id }} duplicate rows.
+      </p>
+    </div>
+    <div class="card">
+      <h3>🧠 Machine Learning</h3>
+      <p>
+        {{ all_results|length }} classification models were trained from scratch on the
+        cleaned dataset using a shared scikit-learn preprocessing pipeline. The best
+        model, <strong>{{ best_model }}</strong>, was selected purely on held-out
+        ROC-AUC ({{ best_metrics.roc_auc }}) and powers the live prediction page.
+      </p>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span class="section-eyebrow">Pipeline</span>
+    <h2>Model Input Features</h2>
+  </div>
+
+  <div class="tag-list" style="margin-bottom:50px;justify-content:center;">
+    {% for f in features %}
+    <span class="tag">{{ f }}</span>
+    {% endfor %}
+  </div>
+
+  <div class="grid-3" style="margin-bottom:50px;">
+    <div class="card">
+      <div class="icon-badge">1️⃣</div>
+      <h3>Preprocessing</h3>
+      <p>Missing-value &amp; duplicate checks, BMI feature engineering from height/weight, one-hot encoding of categorical features, standard scaling of numeric features, stratified 80/20 train-test split.</p>
+    </div>
+    <div class="card">
+      <div class="icon-badge">2️⃣</div>
+      <h3>Training</h3>
+      <p>Logistic Regression, Decision Tree, Random Forest and Gradient Boosting were each trained on identical data and evaluated on the same held-out test set.</p>
+    </div>
+    <div class="card">
+      <div class="icon-badge">3️⃣</div>
+      <h3>Deployment</h3>
+      <p>The winning pipeline (preprocessing + model) is serialized with joblib and loaded once by the Flask app — no retraining happens at request time.</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:50px;">
+    <h3>📈 Power BI Dashboard</h3>
+    <p>
+      The original Power BI report, "Where Heart Data Becomes Insight," is included
+      unmodified in this project (<code>data/dashboard.pbix</code>) and its four pages
+      are displayed as static exports on the <a href="{{ url_for('powerbi') }}" style="color:var(--deep-red);font-weight:700;">Power BI Analytics</a> page —
+      no Microsoft account, Power BI Pro, or Fabric license required.
+    </p>
+  </div>
+
+  <div class="disclaimer">
+    ⚠️ This tool is for educational and research purposes only and is not a substitute
+    for professional medical advice, diagnosis, or treatment.
+  </div>
+
+</div>
+{% endblock %}

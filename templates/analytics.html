@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Data Analytics | CardioAI{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <h1>📊 Data Analytics &amp; Exploratory Data Analysis</h1>
+    <p>All figures below are computed directly from the real 270,064-record dataset extracted from the project's Power BI data model.</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="grid-4" style="margin-bottom:40px;">
+    <div class="metric-card">
+      <div class="metric-value">{{ "{:,}".format(dataset_info.n_rows) }}</div>
+      <div class="metric-label">Total Records</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">{{ dataset_info.n_columns }}</div>
+      <div class="metric-label">Original Columns</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">{{ dataset_info.missing_values }}</div>
+      <div class="metric-label">Missing Values</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-value">{{ dataset_info.duplicate_rows_ignoring_id }}</div>
+      <div class="metric-label">Duplicate Records</div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span class="section-eyebrow">Target Variable</span>
+    <h2>CVD vs Non-CVD Distribution</h2>
+    <p>
+      {{ "{:,}".format(dataset_info.target_distribution.cvd) }} patients ({{ dataset_info.target_distribution.cvd_pct }}%) are labeled CVD,
+      {{ "{:,}".format(dataset_info.target_distribution.non_cvd) }} ({{ dataset_info.target_distribution.non_cvd_pct }}%) are Non-CVD.
+    </p>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:50px;">
+    {% for chart in eda_charts %}
+    <div class="chart-card">
+      <h4>{{ chart.title }}</h4>
+      <img src="{{ url_for('static', filename='images/eda/' ~ chart.file) }}" alt="{{ chart.title }}">
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="section-header">
+    <span class="section-eyebrow">Feature Summary</span>
+    <h2>Numerical Feature Statistics</h2>
+  </div>
+
+  <table class="data-table" style="margin-bottom:50px;">
+    <thead>
+      <tr><th>Feature</th><th>Mean</th><th>Std. Dev.</th><th>Min</th><th>Max</th></tr>
+    </thead>
+    <tbody>
+      {% for feat, s in eda_summary.numeric_feature_stats.items() %}
+      <tr>
+        <td>{{ feat }}</td>
+        <td>{{ s.mean }}</td>
+        <td>{{ s.std }}</td>
+        <td>{{ s.min }}</td>
+        <td>{{ s.max }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="section-header">
+    <span class="section-eyebrow">Categorical Breakdown</span>
+    <h2>Categorical Feature Value Counts</h2>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:50px;">
+    {% for feat, counts in eda_summary.categorical_value_counts.items() %}
+    <div class="card">
+      <h3>{{ feat }}</h3>
+      <table class="data-table">
+        <tbody>
+          {% for val, cnt in counts.items() %}
+          <tr><td>{{ val }}</td><td style="text-align:right;">{{ "{:,}".format(cnt) }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% endblock %}

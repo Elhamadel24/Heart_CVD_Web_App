@@ -1,0 +1,32 @@
+ORIGINAL PROJECT REQUEST
+========================
+
+Build a complete professional WEB APPLICATION for a Cardiovascular Disease
+(CVD) / Heart Disease Prediction and Analytics project, combining:
+
+- Data analysis, preprocessing, and EDA on a real dataset
+- Machine learning models trained from scratch (Logistic Regression,
+  Random Forest, plus additional appropriate classifiers)
+- Real model evaluation and automatic best-model selection
+- An interactive CVD prediction page using the trained pipeline
+- A model performance page showing real (not fake) metrics
+- The original Power BI dashboard ("Where Heart Data Becomes Insight"),
+  shown via static exports (no Power BI Publish to Web / Pro / Fabric /
+  organizational account required) plus a download link for the original
+  .pbix file
+- A documented path for upgrading to live Power BI embedding in the future
+- A professional healthcare-themed Flask web application with Home,
+  Prediction, Data Analytics, Model Performance, Power BI Analytics, and
+  About pages
+
+NOTE ON THE DATASET
+====================
+The user intended to supply data/heart_data.xlsx directly, but only the
+PDF export and the .pbix file were actually uploaded. The full, real
+270,064-row dataset was recovered by extracting it programmatically from
+the data model embedded inside the .pbix file itself (using the pbixray
+library), then verified against the KPIs shown in the PDF export (row
+counts, CVD/Non-CVD split, glucose-status breakdown all match exactly).
+No columns or values were invented.
+
+See README.md for the full project write-up.

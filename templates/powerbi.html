@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Power BI Analytics | CardioAI{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="container">
+    <h1>📈 Power BI Analytics</h1>
+    <p>The original "Where Heart Data Becomes Insight" Power BI report, exported directly from the source .pbix file. Layout, KPIs, charts and colors are preserved exactly as designed.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-bottom:24px;">
+    <div class="tag-list">
+      <span class="tag">Static export — works fully offline, no Power BI account required</span>
+    </div>
+    <a href="{{ url_for('download_pbix') }}" class="btn btn-primary">⬇ Download Original Power BI Dashboard (.pbix)</a>
+  </div>
+
+  <div class="dashboard-tabs">
+    {% for page in pages %}
+    <button class="dashboard-tab {{ 'active' if loop.first }}" onclick="showDashboardPage({{ loop.index0 }})">
+      {{ loop.index }}. {{ page.title }}
+    </button>
+    {% endfor %}
+  </div>
+
+  <div class="dashboard-frame">
+    {% for page in pages %}
+    <div class="dashboard-page {{ 'active' if loop.first }}" id="dash-page-{{ loop.index0 }}">
+      <img src="{{ url_for('static', filename='dashboard/' ~ page.file) }}" alt="{{ page.title }}">
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="card" style="margin:40px 0;">
+    <h3>About this integration</h3>
+    <p>
+      This project's Power BI report cannot currently be published via Power BI's
+      "Publish to Web" or embedded through Power BI Embedded, since those require
+      an organizational/university Microsoft account or Power BI Pro licensing.
+      Instead, the four report pages are exported as high-resolution static
+      images directly from the original <code>.pbix</code> file, so the dashboard
+      is always viewable — fully offline and without any Microsoft authentication.
+      The original, unmodified <code>.pbix</code> file is bundled with this project
+      and can be downloaded above and opened in Power BI Desktop at any time.
+      See <code>powerbi_embed_future.md</code> in the project root for how this
+      could be upgraded to a live embedded report later.
+    </p>
+  </div>
+</div>
+{% endblock %}
