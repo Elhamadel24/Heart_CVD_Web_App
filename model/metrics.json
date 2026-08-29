@@ -79,7 +79,7 @@
           31395
         ]
       ],
-      "train_time_sec": 2.46,
+      "train_time_sec": 2.6,
       "roc_curve": {
         "fpr": [
           0.0,
@@ -3201,7 +3201,7 @@
           31987
         ]
       ],
-      "train_time_sec": 3.19,
+      "train_time_sec": 3.39,
       "roc_curve": {
         "fpr": [
           0.0,
@@ -3245,7 +3245,7 @@
           32098
         ]
       ],
-      "train_time_sec": 10.79,
+      "train_time_sec": 13.31,
       "roc_curve": {
         "fpr": [
           0.0,
@@ -5615,7 +5615,7 @@
           32074
         ]
       ],
-      "train_time_sec": 7.59,
+      "train_time_sec": 9.09,
       "roc_curve": {
         "fpr": [
           0.0,

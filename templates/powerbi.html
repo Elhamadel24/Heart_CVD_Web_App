@@ -5,48 +5,64 @@
 <div class="page-header">
   <div class="container">
     <h1>📈 Power BI Analytics</h1>
-    <p>The original "Where Heart Data Becomes Insight" Power BI report, exported directly from the source .pbix file. Layout, KPIs, charts and colors are preserved exactly as designed.</p>
+    <p>The original "Where Heart Data Becomes Insight" Power BI report, published live from Power BI Service. Fully interactive — filter, drill down, and explore the same dashboard shown above, directly inside this page.</p>
   </div>
 </div>
 
 <div class="container">
   <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-bottom:24px;">
     <div class="tag-list">
-      <span class="tag">Static export — works fully offline, no Power BI account required</span>
+      <span class="tag">Live interactive report — Power BI "Publish to Web"</span>
     </div>
     <a href="{{ url_for('download_pbix') }}" class="btn btn-primary">⬇ Download Original Power BI Dashboard (.pbix)</a>
   </div>
 
-  <div class="dashboard-tabs">
-    {% for page in pages %}
-    <button class="dashboard-tab {{ 'active' if loop.first }}" onclick="showDashboardPage({{ loop.index0 }})">
-      {{ loop.index }}. {{ page.title }}
-    </button>
-    {% endfor %}
-  </div>
-
-  <div class="dashboard-frame">
-    {% for page in pages %}
-    <div class="dashboard-page {{ 'active' if loop.first }}" id="dash-page-{{ loop.index0 }}">
-      <img src="{{ url_for('static', filename='dashboard/' ~ page.file) }}" alt="{{ page.title }}">
+  <div class="dashboard-frame" style="padding:0;overflow:hidden;">
+    <div class="powerbi-embed-wrap">
+      <iframe
+        title="CardioAI Power BI Dashboard"
+        src="https://app.powerbi.com/view?r=eyJrIjoiMGE2YTMxZGEtMGI0NS00MGYyLWFmMGEtMTNjMWU5NGNhNTUyIiwidCI6ImNjMmRjNWY0LWMwYzgtNGNiZS05NGUzLWRiMDNmYjEwYTVhMiJ9&pageName=16d6c07dc126cd405053"
+        allowFullScreen="true"
+        loading="lazy">
+      </iframe>
     </div>
-    {% endfor %}
   </div>
 
   <div class="card" style="margin:40px 0;">
     <h3>About this integration</h3>
     <p>
-      This project's Power BI report cannot currently be published via Power BI's
-      "Publish to Web" or embedded through Power BI Embedded, since those require
-      an organizational/university Microsoft account or Power BI Pro licensing.
-      Instead, the four report pages are exported as high-resolution static
-      images directly from the original <code>.pbix</code> file, so the dashboard
-      is always viewable — fully offline and without any Microsoft authentication.
-      The original, unmodified <code>.pbix</code> file is bundled with this project
-      and can be downloaded above and opened in Power BI Desktop at any time.
-      See <code>powerbi_embed_future.md</code> in the project root for how this
-      could be upgraded to a live embedded report later.
+      This report is embedded directly from Power BI Service using the
+      <strong>"Publish to Web"</strong> link, so it stays fully interactive —
+      visitors can filter, hover, and drill into the same visuals designed in
+      Power BI Desktop, with no Microsoft account or Power BI Pro license
+      required to view it. The original, unmodified <code>.pbix</code> file
+      is still bundled with this project and can be downloaded above and
+      opened in Power BI Desktop at any time.
     </p>
   </div>
 </div>
+
+<style>
+.powerbi-embed-wrap {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio, adjust if your report is a different shape */
+  height: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.powerbi-embed-wrap iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+@media (max-width: 900px) {
+  .powerbi-embed-wrap {
+    padding-bottom: 130%; /* taller on mobile so the report doesn't get squeezed */
+  }
+}
+</style>
 {% endblock %}

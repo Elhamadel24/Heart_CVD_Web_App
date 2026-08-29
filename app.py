@@ -187,7 +187,7 @@ def performance():
 
 @app.route("/powerbi")
 def powerbi():
-    return render_template("powerbi.html", pages=DASHBOARD_PAGES)
+    return render_template("powerbi.html")
 
 
 @app.route("/about")
